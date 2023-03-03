@@ -77,19 +77,36 @@ public class ShortestPath
      */
     public void shortestPath() 
     {
-        int startingVertex;
-        
-        System.out.println("\nPlease enter a starting vertex:");
-        startingVertex = in.nextInt();
-        System.out.println("\nThe shortest path from " + startingVertex + " to all nodes are:");
+        int src;
+        Queue<Integer> Q = new LinkedList<>();
+        HashMap<Integer, Boolean> visited = new HashMap<>();
+        System.out.println("\nPlease enter a starting vertex:"); 
+        src = in.nextInt(); 
+        System.out.println("\nThe shortest path from " + src + " to all nodes are:"); 
+
+
+
 
         for (int i = 0; i < uniqueNodes.size(); i++)
         {
+            int dst = i;
+            List<Integer> path = new ArrayList<>();
+            Q.offer(src);
+            visited.put(src, true);
+    
+            HashMap<Integer, Integer> parent = new HashMap<>();
+            parent.put(src, null);
 
-            System.out.println("");
+
+            if (src == dst)
+            {
+                path.add(src);
+            }
+
+
+            Collections.reverse(path);
+            System.out.println(path);
         }
 
-
     }//end shortestPath
-
 }

@@ -18,9 +18,6 @@ public class Main
         graph.readGraph();
         graph.printGraph();
         graph.shortestPath();
-        
-        //do a list since I think that would be easiest
-
 
 
     } //end of main method
