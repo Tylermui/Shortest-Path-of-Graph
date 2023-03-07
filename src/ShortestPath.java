@@ -2,9 +2,13 @@ import java.io.*;
 import java.util.*; 
 public class ShortestPath 
 {
-    List<List<Integer>> adjList;
+    ArrayList<ArrayList<Integer>> adjList;
     HashSet<Integer> uniqueNodes = new HashSet<Integer>();
+    boolean[] visited;
+    int[] visitingOrder;
+    int count = 0;
     Scanner in = new Scanner(System.in);
+    int numOfVertices;
 
     public ShortestPath() 
     {
@@ -30,7 +34,7 @@ public class ShortestPath
     public void printGraph()
     {
         System.out.println("2. Print graph");
-        for (int i = 0; i < uniqueNodes.size(); i++) 
+        for (int i = 0; i < numOfVertices; i++) 
         {
             System.out.print(i + "-->");
             for (int j = 0; j < adjList.get(i).size(); j++)
@@ -64,6 +68,7 @@ public class ShortestPath
                 uniqueNodes.add(to);
             }
             scanner.close();
+            numOfVertices = uniqueNodes.size();
         } 
         catch (FileNotFoundException e) 
         {
@@ -78,35 +83,60 @@ public class ShortestPath
     public void shortestPath() 
     {
         int src;
-        Queue<Integer> Q = new LinkedList<>();
-        HashMap<Integer, Boolean> visited = new HashMap<>();
         System.out.println("\nPlease enter a starting vertex:"); 
         src = in.nextInt(); 
         System.out.println("\nThe shortest path from " + src + " to all nodes are:"); 
 
-
-
-
-        for (int i = 0; i < uniqueNodes.size(); i++)
+        for (int i = 0; i < numOfVertices; i++)
         {
-            int dst = i;
+            int [] parent = new int[numOfVertices];
+            int [] distance = new int[numOfVertices];
+            bfs(src, i, parent, distance);
             List<Integer> path = new ArrayList<>();
-            Q.offer(src);
-            visited.put(src, true);
-    
-            HashMap<Integer, Integer> parent = new HashMap<>();
-            parent.put(src, null);
-
-
-            if (src == dst)
-            {
-                path.add(src);
+            int crawl = i;
+            path.add(crawl);
+            while (parent[crawl] != -1) {
+                path.add(parent[crawl]);
+                crawl = parent[crawl];
             }
-
 
             Collections.reverse(path);
             System.out.println(path);
+
         }
 
     }//end shortestPath
+    public void bfs(int src, int dest, int[] parent, int[] distance)
+    {
+        Queue<Integer> Q = new LinkedList<>();
+        visited = new boolean[uniqueNodes.size()];
+
+        for (int j = 0; j < numOfVertices; j++)
+        {
+            parent[j] = -1;
+        }
+
+        Q.offer(src);
+        visited[src] = true;    
+        distance[src] = 0;
+        
+        while (!Q.isEmpty()) 
+        {
+            int currentVertex = Q.poll();
+            for (int adj : adjList.get(currentVertex)) 
+            {
+                if(!visited[adj])
+                {
+                    visited[adj] = true;
+                    Q.offer(adj);
+                    distance[adj] = distance[currentVertex] + 1;
+                    parent[adj] = currentVertex;
+                }
+                if (adj == dest)
+                {
+                    return;
+                }
+            }
+        }
+    }//end bfs
 }
