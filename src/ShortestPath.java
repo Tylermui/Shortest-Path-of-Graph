@@ -1,15 +1,26 @@
 import java.io.*;
 import java.util.*; 
+/**
+ * This class is the class for the Shortest Path
+ * algorithm. This includes a Breadth-First Search
+ * algorithm along with a method to print and 
+ * read an unweighted and undirected graph.
+ * @author Tyler Mui
+ */
 public class ShortestPath 
 {
-    ArrayList<ArrayList<Integer>> adjList;
-    HashSet<Integer> uniqueNodes = new HashSet<Integer>();
-    boolean[] visited;
-    int[] visitingOrder;
-    int count = 0;
+    private ArrayList<ArrayList<Integer>> adjList;
+    private HashSet<Integer> uniqueNodes = new HashSet<Integer>();
+    private boolean[] visited;
+    private int[] visitingOrder;
+    private int count = 0;
+    private int numOfVertices;
     Scanner in = new Scanner(System.in);
-    int numOfVertices;
 
+    /**
+     * This is the constructor for a Shortest Path 
+     * object.
+     */
     public ShortestPath() 
     {
         adjList = new ArrayList<>();
@@ -19,7 +30,7 @@ public class ShortestPath
     }
 
     /**
-     * adds an edge between the two nodes, source and destination
+     * adds an edge between the two given nodes, source and destination
      * @param src source node; node we are starting at
      * @param dest destination node; also the adjacent node 
      */
@@ -29,7 +40,49 @@ public class ShortestPath
     }
 
     /**
+     * 
+     * @param src source node from where we are starting at
+     * @param dest destination node that we are try to end at
+     * @param parent an array of parent nodes that has the predecessor of the source node
+     * @param distance an array of distances to track how many steps it takes to get to a given node
+     */
+    public void bfs(int src, int dest, int[] parent, int[] distance)
+    {
+        Queue<Integer> Q = new LinkedList<>();
+        visited = new boolean[uniqueNodes.size()];
+
+        for (int j = 0; j < numOfVertices; j++)
+        {
+            parent[j] = -1;
+        }
+
+        Q.offer(src);
+        visited[src] = true;    
+        distance[src] = 0;
+        
+        while (!Q.isEmpty()) 
+        {
+            int currentVertex = Q.poll();
+            for (int adj : adjList.get(currentVertex)) 
+            {
+                if(!visited[adj])
+                {
+                    visited[adj] = true;
+                    Q.offer(adj);
+                    distance[adj] = distance[currentVertex] + 1;
+                    parent[adj] = currentVertex;
+                }
+                if (adj == dest)
+                {
+                    return;
+                }
+            }
+        }
+    }//end bfs
+
+    /**
      * printGraph(): print the graph with a point and its adjacent vertices
+     * 
      */
     public void printGraph()
     {
@@ -78,7 +131,7 @@ public class ShortestPath
 
     /**
      * shortestPath() finds the shortest path at a starting point to all other 
-     * points in the undirected graph.
+     * points in the undirected unweighted graph.
      */
     public void shortestPath() 
     {
@@ -106,37 +159,5 @@ public class ShortestPath
         }
 
     }//end shortestPath
-    public void bfs(int src, int dest, int[] parent, int[] distance)
-    {
-        Queue<Integer> Q = new LinkedList<>();
-        visited = new boolean[uniqueNodes.size()];
-
-        for (int j = 0; j < numOfVertices; j++)
-        {
-            parent[j] = -1;
-        }
-
-        Q.offer(src);
-        visited[src] = true;    
-        distance[src] = 0;
-        
-        while (!Q.isEmpty()) 
-        {
-            int currentVertex = Q.poll();
-            for (int adj : adjList.get(currentVertex)) 
-            {
-                if(!visited[adj])
-                {
-                    visited[adj] = true;
-                    Q.offer(adj);
-                    distance[adj] = distance[currentVertex] + 1;
-                    parent[adj] = currentVertex;
-                }
-                if (adj == dest)
-                {
-                    return;
-                }
-            }
-        }
-    }//end bfs
+    
 }
