@@ -9,13 +9,12 @@ import java.util.*;
  */
 public class ShortestPath 
 {
-    private ArrayList<ArrayList<Integer>> adjList;
-    private HashSet<Integer> uniqueNodes = new HashSet<Integer>();
-    private boolean[] visited;
-    private int[] visitingOrder;
-    private int count = 0;
-    private int numOfVertices;
-    Scanner in = new Scanner(System.in);
+    private ArrayList<ArrayList<Integer>> adjList; 
+    private HashSet<Integer> uniqueNodes = new HashSet<Integer>(); 
+    private boolean[] visited; 
+    private int NUM_OF_VERTICES; 
+    private int MAX_NUM_OF_VERTICES = 50;
+    Scanner in = new Scanner(System.in); 
 
     /**
      * This is the constructor for a Shortest Path 
@@ -24,8 +23,9 @@ public class ShortestPath
     public ShortestPath() 
     {
         adjList = new ArrayList<>();
-        for (int i = 0; i < 50; i++) {
-            adjList.add(new ArrayList<>());
+        for (int i = 0; i < MAX_NUM_OF_VERTICES; i++) 
+        {
+            adjList.add(new ArrayList<>()); 
         }
     }
 
@@ -36,7 +36,7 @@ public class ShortestPath
      */
     public void addEdge(int src, int dest) 
     {
-    	adjList.get(src).add(dest);
+    	adjList.get(src).add(dest); 
     }
 
     /**
@@ -49,33 +49,30 @@ public class ShortestPath
      */
     public void bfs(int src, int dest, int[] parent, int[] distance)
     {
-        Queue<Integer> Q = new LinkedList<>();
-        visited = new boolean[uniqueNodes.size()];
-
-        for (int j = 0; j < numOfVertices; j++)
+        Queue<Integer> Q = new LinkedList<>(); 
+        visited = new boolean[uniqueNodes.size()]; 
+        for (int j = 0; j < NUM_OF_VERTICES; j++)
         {
-            parent[j] = -1;
+            parent[j] = -1; 
         }
-
-        Q.offer(src);
-        visited[src] = true;    
-        distance[src] = 0;
-        
+        Q.offer(src); 
+        visited[src] = true; 
+        distance[src] = 0; 
         while (!Q.isEmpty()) 
         {
-            int currentVertex = Q.poll();
+            int currentVertex = Q.poll(); 
             for (int adj : adjList.get(currentVertex)) 
             {
                 if(!visited[adj])
                 {
-                    visited[adj] = true;
-                    Q.offer(adj);
-                    distance[adj] = distance[currentVertex] + 1;
-                    parent[adj] = currentVertex;
+                    visited[adj] = true; 
+                    Q.offer(adj); 
+                    distance[adj] = distance[currentVertex] + 1; 
+                    parent[adj] = currentVertex; 
                 }
                 if (adj == dest)
                 {
-                    return;
+                    return; 
                 }
             }
         }
@@ -87,15 +84,15 @@ public class ShortestPath
      */
     public void printGraph()
     {
-        System.out.println("2. Print graph");
-        for (int i = 0; i < numOfVertices; i++) 
+        System.out.println("2. Print graph"); 
+        for (int i = 0; i < NUM_OF_VERTICES; i++) 
         {
-            System.out.print(i + "-->");
+            System.out.print(i + "-->"); 
             for (int j = 0; j < adjList.get(i).size(); j++)
             {
-                System.out.print("  " + adjList.get(i).get(j));
+                System.out.print("  " + adjList.get(i).get(j)); 
             }
-            System.out.println();
+            System.out.println(); 
         }
     }//end printGraph
 
@@ -106,27 +103,27 @@ public class ShortestPath
     {
     	try 
         {
-            System.out.println("1. Read graph \n");
+            System.out.println("1. Read graph \n"); 
             //reading the graph.txt file
-            File file = new File("graph.txt");
-            Scanner scanner = new Scanner(file);
+            File file = new File("graph.txt"); 
+            Scanner scanner = new Scanner(file); 
             while (scanner.hasNextLine()) 
             {
-                String line = scanner.nextLine();
-                String[] nodes = line.split(", ");
-                int from = Integer.parseInt(nodes[0]);
-                int to = Integer.parseInt(nodes[1]);
-                addEdge(from, to);
-    	        addEdge(to, from);
-                uniqueNodes.add(from);
-                uniqueNodes.add(to);
+                String line = scanner.nextLine(); 
+                String[] nodes = line.split(", "); 
+                int from = Integer.parseInt(nodes[0]); 
+                int to = Integer.parseInt(nodes[1]); 
+                addEdge(from, to); 
+    	        addEdge(to, from); 
+                uniqueNodes.add(from); 
+                uniqueNodes.add(to); 
             }
-            scanner.close();
-            numOfVertices = uniqueNodes.size();
+            scanner.close(); 
+            NUM_OF_VERTICES = uniqueNodes.size(); 
         } 
         catch (FileNotFoundException e) 
         {
-            System.out.println("File not found.");
+            System.out.println("File not found."); 
         }
     }//end readGraph()
 
@@ -136,29 +133,26 @@ public class ShortestPath
      */
     public void shortestPath() 
     {
-        int src;
+        int src; 
         System.out.println("\nPlease enter a starting vertex:"); 
         src = in.nextInt(); 
         System.out.println("\nThe shortest path from " + src + " to all nodes are:"); 
 
-        for (int i = 0; i < numOfVertices; i++)
+        for (int i = 0; i < NUM_OF_VERTICES; i++)
         {
-            int [] parent = new int[numOfVertices];
-            int [] distance = new int[numOfVertices];
-            bfs(src, i, parent, distance);
-            List<Integer> path = new ArrayList<>();
-            int crawl = i;
-            path.add(crawl);
-            while (parent[crawl] != -1) {
-                path.add(parent[crawl]);
-                crawl = parent[crawl];
+            int [] parent = new int[NUM_OF_VERTICES]; 
+            int [] distance = new int[NUM_OF_VERTICES]; 
+            List<Integer> path = new ArrayList<>(); 
+            int crawl = i; 
+            bfs(src, i, parent, distance); 
+            path.add(crawl); 
+            while (parent[crawl] != -1) 
+            {
+                path.add(parent[crawl]); 
+                crawl = parent[crawl]; 
             }
-
-            Collections.reverse(path);
-            System.out.println(path);
-
+            Collections.reverse(path); 
+            System.out.println(path); 
         }
-
     }//end shortestPath
-    
 }
