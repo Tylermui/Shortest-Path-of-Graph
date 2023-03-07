@@ -40,7 +40,8 @@ public class ShortestPath
     }
 
     /**
-     * 
+     * Breadth-First Search algorithm that goes through a graph
+     * and tracks the steps it takes to go from one node to another.
      * @param src source node from where we are starting at
      * @param dest destination node that we are try to end at
      * @param parent an array of parent nodes that has the predecessor of the source node
