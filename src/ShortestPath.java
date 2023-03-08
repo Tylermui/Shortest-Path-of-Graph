@@ -105,7 +105,7 @@ public class ShortestPath
         {
             System.out.println("1. Read graph \n"); 
             //reading the graph.txt file
-            File file = new File("graph3.txt"); 
+            File file = new File("graph.txt"); 
             Scanner scanner = new Scanner(file); 
             while (scanner.hasNextLine()) 
             {
